@@ -1,0 +1,1 @@
+<?php echo $javapath; ?> -Xms64m -Xmx64m -jar "<?php echo $appDir; ?>/build/jar/yuicompressor.jar" --type js --charset utf-8 "<?php echo $tempFilename; ?>" -o "<?php echo $tempFilename . '.' . $options['compressType']; ?>"

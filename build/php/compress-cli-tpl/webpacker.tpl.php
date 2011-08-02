@@ -1,0 +1,1 @@
+<?php echo $javapath; ?> -Xms64m -Xmx64m -jar "<?php echo $appDir; ?>/build/jar/webpacker.jar" "<?php echo $tempFilename; ?>" --mode 1 --charset utf-8 -o "<?php echo $tempFilename . '.' . $options['compressType']; ?>"

@@ -1,0 +1,1 @@
+<?php echo $javapath; ?> -Xms64m -Xmx64m -jar "<?php echo $appDir; ?>/build/jar/compiler.jar" --js "<?php echo $tempFilename; ?>" --js_output_file "<?php echo $tempFilename . '.' . $options['compressType']; ?>"

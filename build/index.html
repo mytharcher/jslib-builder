@@ -1,0 +1,408 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>JavaScript Library Package Build Tool</title>
+<style>
+html,body,h1,h2,h3,h4,h5,h6,ul,ol,li,p,form,dl,dt,dd{margin:0; padding:0;}
+html,body{position:relative; width:100%; height:100%; overflow:hidden; background:#f7f7f7;}
+body{font:13px/1.5em Helvetica, Arial, sans-serif; color:#555;}
+header,section{display:block; position:relative;}
+header>aside{position:absolute; top:0; right:0;}
+a{color:#06c;}
+a:hover{color:#f60;}
+img{border:0;}
+q{margin:0 5px; color:#06c; text-decoration:underline; cursor:pointer;}
+q.on{color:#000; text-decoration:none; font-weight:bold; cursor:default;}
+q.disabled{color:#999; cursor:default; text-decoration:none;}
+q:before{content:'';}
+q:after{content:'';}
+input,textarea{padding:0; resize:none;}
+
+fieldset.hidden{display:none;}
+
+.layout-border,
+.layout-float,
+.layout-container,
+.layout-mask{position:absolute; overflow:hidden;}
+.layout-border>.layout-container{position:absolute; top:0; right:0; bottom:0; left:0;}
+.layout-float>.layout-container{position:static;}
+.layout-mask{display:none; top:0; right:0; bottom:0; left:0; background:rgba(0,0,0,0.3);}
+.layout-mask.active{display:block;}
+
+.box{padding:5px; border:2px solid #ddd; background:#fff;
+	-webkit-border-radius:5px; -webkit-box-shadow:0px 1px 4px rgba(0, 0, 0, .3);
+	-moz-border-radius:5px; -moz-box-shadow:0px 1px 4px rgba(0, 0, 0, .3);
+	border-radius:5px; box-shadow:0px 1px 4px rgba(0, 0, 0, .3);
+}
+
+.popup{display:none; background:#fff;}
+.popup.active{display:block;}
+.dialog header{padding-bottom:3px;}
+.dialog .dialog-drag-handle{cursor:default;}
+.close-button{
+width:18px;
+height:18px;
+overflow:hidden;
+padding:0;
+border:0;
+background:transparent;
+color:#ccc;
+font:bold 13px Arial;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+text-align:center;
+-webkit-transition:background .25s ease-in-out, color .25s ease-in-out;
+-moz-transition:background .25s ease-in-out, color .25s ease-in-out;
+transition:background .25s ease-in-out, color .25s ease-in-out;
+}
+.close-button:hover{background:#f00; color:#fff;}
+.dialog header .close-button:hover{background:#f00; color:#fff;}
+
+button.operation-button{
+	-webkit-border-radius: 5px; 
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding: .2em 1em .2em;
+	font:bold 16px "黑体";
+}
+
+.button {
+	display: inline-block;
+	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
+	*display: inline;
+	vertical-align: baseline;
+	margin: 0 2px;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	font: 14px/100% Arial, Helvetica, sans-serif;
+	text-shadow: 0 1px 1px rgba(0,0,0,.3);
+	-webkit-border-radius: 3px; 
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.button:hover {
+	text-decoration: none;
+}
+.button:active {
+	position: relative;
+	top: 1px;
+}
+.button.white {
+	color: #606060;
+	border: solid 1px #b7b7b7;
+	background: #fff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+	background: -moz-linear-gradient(top,  #fff,  #ededed);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');
+	font-weight:normal;
+}
+.button.white:hover {
+	background: #ededed;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dcdcdc));
+	background: -moz-linear-gradient(top,  #fff,  #dcdcdc);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dcdcdc');
+}
+.button.white:active {
+	color: #999;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
+	background: -moz-linear-gradient(top,  #ededed,  #fff);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff');
+}
+.button.green {
+	color: #e8f0de;
+	border: solid 1px #538312;
+	background: #64991e;
+	background: -webkit-gradient(linear, left top, left bottom, from(#7db72f), to(#4e7d0e));
+	background: -moz-linear-gradient(top,  #7db72f,  #4e7d0e);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#7db72f', endColorstr='#4e7d0e');
+}
+.button.green:hover {
+	background: #538018;
+	background: -webkit-gradient(linear, left top, left bottom, from(#6b9d28), to(#436b0c));
+	background: -moz-linear-gradient(top,  #6b9d28,  #436b0c);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#6b9d28', endColorstr='#436b0c');
+}
+.button.green:active {
+	color: #a9c08c;
+	background: -webkit-gradient(linear, left top, left bottom, from(#4e7d0e), to(#7db72f));
+	background: -moz-linear-gradient(top,  #4e7d0e,  #7db72f);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#4e7d0e', endColorstr='#7db72f');
+}
+
+#Holder{width:100%; height:100%; overflow:auto;}
+
+#Header{left:0; right:0; height:20px; padding:5px;}
+#Header h1{float:left; line-height:20px; color:#555; text-shadow:1px 1px 0 #fff; font-size:20px;}
+#Header h1 strong{color:#66CC00;}
+#MainBody{top:30px; bottom:0; width:100%;}
+#MainBody>.layout-container{left:5px; bottom:5px; background:#f7f7f7;}
+
+.elfjs-panel{top:0; bottom:0; border:3px solid #999; background:#999;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+}
+.elfjs-panel>h3{height:20px; padding:0 5px; color:#fff; font-size:13px; line-height:1.2em;}
+.elfjs-panel-content{position:absolute; top:20px; bottom:0; width:100%; overflow:hidden; overflow-y:auto; background:#fff;}
+
+#ClassPicker{left:0; right:360px;}
+#ClassPicker .item>.item-group{display:none; clear:both; padding-left:20px;}
+#ClassPicker .item.expand>.item-group{display:block;}
+#ClassPicker .item.file{list-style:none;}
+#ClassPicker .item.folder{list-style-type:disc;}
+#ClassPicker .item.folder.expand{list-style-type:circle;}
+#ClassPicker .class-item-title{position:relative; zoom:1;}
+#ClassPicker .class-item-title>p{position:relative; zoom:1; height:20px; padding:1px 0;}
+#ClassPicker .class-item-title label{display:inline-block; padding:0 2px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+}
+#ClassPicker .class-item-title label>input[type=checkbox]{float:left;}
+#ClassPicker .item.chosen>.class-item-title label{font-weight:bold;}
+#ClassPicker .item.depends>.class-item-title label{background:#cf9;}
+#ClassPicker .class-detail{border:1px solid #999; background:#fff; opacity:.75; z-index:1;}
+#ClassPicker .class-detail>legend{background:#999; color:#fff;}
+#ClassPicker .class-detail{display:none; position:absolute; top:0; right:0; width:320px;}
+#ClassPicker .class-detail>legend{padding:0 5px;}
+#ClassPicker .class-dependency-item{list-style:inside square;}
+#ClassPicker .class-item-title:hover>p{color:#090; background:#EAFFD0;}
+#ClassPicker .class-item-title:hover>.class-detail,
+#ClassPicker .class-detail:hover{display:block;}
+#ClassPicker .class-detail dt,
+#ClassPicker .class-detail dd{float:left;}
+#ClassPicker .class-detail dt{clear:left; font-weight:bold; margin-right:.5em;}
+#ClassPicker .class-detail dd{clear:right;}
+#ClassPicker .class-detail .class-depend{clear:both;}
+
+#ExportOptions{right:0; width:340px; height:100%; overflow:auto; padding-right:10px;}
+#ExportOptions fieldset{margin:0; margin-bottom:10px; border:1px solid #bbb;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+}
+#ExportOptions h3{
+	margin-bottom:10px;
+	font-size:13px;
+}
+#ExportOptions fieldset legend{background:#bbb; color:#fff; padding:0 5px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+}
+
+#ImportRepoList{margin:5px 0;}
+
+#ExportOptions .optional{display:none;}
+
+#ExportByPathRadio:checked~.optional,
+#CustomTopNSCheck:checked~.optional{display:inline;}
+
+#ExportOptions p.operation{margin-bottom:10px;}
+
+#Footnote ol{padding:0 0 0 25px;}
+
+#RepositoryConfigDialog{width:600px;}
+#RepositoryConfigDialog .tab-switch-wrap{clear:both; zoom:1; overflow:auto; border-bottom:1px solid #bbb;}
+#RepositoryConfigDialog .tab-switch{float:left; zoom:1; margin:0 0 -1px 5px; padding:0 10px; border:1px solid #bbb; cursor:pointer;}
+#RepositoryConfigDialog .tab-switch.on{background:#bbb; color:#fff; font-weight:bold; cursor:default;}
+#RepositoryConfigDialog .tab-content-wrap{clear:both;}
+#RepositoryConfigDialog .tab-content{display:none;}
+#RepositoryConfigDialog .tab-content.active{display:block;}
+#RepositoryConfigDialog section .close-button:hover{background:none; color:#f00;}
+#RepositoryConfigDialog .input-short{width:50px;}
+#RepositoryConfigDialog .input-long{width:150px;}
+#RepositoryConfigDialog form th{font-weight:normal;}
+#RepositoryConfigDialog form p.operation{margin-top:15px;}
+#RepositoryConfigList li{margin:5px 0;}
+#RepositoryConfigList li:hover{background:#def;}
+#RepositoryConfigList li>aside{float:right;}
+.package-list span.item-namespace{margin-right:2px; padding:1px 5px; border:1px solid #06c; -webkit-border-radius:2px; -moz-border-radius:2px; border-radius:2px; color:#06c; background:#fff; cursor:default;}
+.package-list span.item-hidden{font-style:italic; color:#999; border-color:#999;}
+.package-list span.item-mixined{font-weight:bold;}
+#RepositoryConfigList .mixin-item{margin:0 2px; padding:1px 5px; border:1px dotted #06c; -webkit-border-radius:2px; -moz-border-radius:2px; border-radius:2px; background:#fff; color:#06c;}
+
+#ConsoleContent{width:500px; height:300px; overflow:auto;}
+</style>
+
+<script>
+document.createElement('header');
+document.createElement('aside');
+document.createElement('section');
+</script>
+</head>
+
+<body>
+
+<div id="Holder">
+	<div id="MainPage">
+		<header id="Header" class="layout-border">
+			<h1><strong>JavaScript</strong> Library Package Build Tool</h1>
+			<aside>
+				<p><span id="HelpSwitchBtn" class="item"><q>Help</q></span>| <span class="item">v1.0</span></p>
+			</aside>
+		</header>
+		
+		<div id="MainBody" class="layout-border">
+			<div class="layout-container">
+				<section id="ClassPicker" class="layout-border elfjs-panel">
+					<h3>选择您需要的模块</h3>
+					<div id="ClassStructure" class="elfjs-panel-content"></div>
+				</section>
+				<aside id="ExportOptions" class="layout-border">
+					<form id="ExportForm" action="php/build.php" method="post">
+						<h3>导出选项</h3>
+						<fieldset>
+							<legend>仓库配置</legend>
+							<h4>已导入的仓库</h4>
+							<p id="ImportRepoList" class="package-list"></p>
+							<p><button type="button" id="ChangeConifgBtn" class="button white">修改仓库配置</button></p>
+						</fieldset>
+						<fieldset id="DependCheckGroup">
+							<legend>依赖管理</legend>
+							<p>
+								<label for="AutoDependRadio" title="推荐"><input type="radio" name="exportDepend" id="AutoDependRadio" value="1" checked />自动导出依赖</label>
+								<label for="NoDependRadio" title="不推荐"><input type="radio" name="exportDepend" id="NoDependRadio" value="0" />只导出选中模块</label>
+							</p>
+						</fieldset>
+						<fieldset id="ExportTypeGroup">
+							<legend>导出目标</legend>
+							<p>
+								<label for="ExportByDownloadRadio"><input type="radio" name="exportType" id="ExportByDownloadRadio" value="1" checked />下载文件</label>
+							</p>
+							<p>
+								<input type="radio" name="exportType" id="ExportByPathRadio" value="0" /><label for="ExportByPathRadio">生成到指定路径</label>
+								<label id="ExportByPathLabel" for="ExportPathInput" class="optional">：<input type="text" name="exportPath" id="ExportPathInput" placeholder="请输入导出路径" value="../output/lib.js" /></label></p>
+						</fieldset>
+						<fieldset>
+							<legend>压缩选项</legend>
+							<ul>
+								<li><label for="NoCompressRadio"><input type="radio" name="compressType" id="NoCompressRadio" value="" checked />源码导出</label></li>
+								<li><label for="CompressByYUIRadio" title="YUI Compressor"><input type="radio" name="compressType" id="CompressByYUIRadio" value="yui" />YUI压缩</label> <a href="http://developer.yahoo.com/yui/compressor/" target="_blank" title="了解详情">[?]</a></li>
+								<li><label for="CompressByGCCRadio" title="Google Closure Compiler"><input type="radio" name="compressType" id="CompressByGCCRadio" value="gcc" />GCC压缩</label> <a href="http://closure-compiler.appspot.com/" target="_blank" title="了解详情">[?]</a></li>
+								<li><label for="CompressByWebPackerRadio" title="百度前端大牛欧阳先伟开发的JS压缩器"><input type="radio" name="compressType" id="CompressByWebPackerRadio" value="webpacker" />WebPacker压缩</label></li>
+								<!--<li><label for="CompressByJSARadio" title="百度前端大牛金大为开发的JS压缩器"><input type="radio" name="compressType" id="CompressByJSARadio" value="jsa" />JSA压缩</label></li>-->
+							</ul>
+						</fieldset>
+						<fieldset>
+							<legend>高级</legend>
+							<p><label for="ClosurePackageCheck" title="可以在压缩时略微提升压缩比率"><input type="checkbox" name="useClosure" id="ClosurePackageCheck" value="1" checked="checked" />使用闭包包装器</label></p>
+						</fieldset>
+						
+						<fieldset id="ExportList" class="hidden"></fieldset>
+						<fieldset class="hidden">
+							<input type="hidden" name="packages" id="ExportPackagesHidden" />
+							<input type="hidden" name="debug" id="ConsoleLogHidden" />
+						</fieldset>
+						
+						<p class="operation">
+							<button type="submit" class="operation-button button green">导出</button>
+							<button type="button" class="operation-button button white" id="SaveConfigBtn">保存设置</button>
+							<button type="button" class="operation-button button white" id="ClearConfigBtn">清空设置</button>
+						</p>
+					</form>
+				</aside>
+			</div>
+		</div>
+	</div>
+	<div style="position:absolute; top:0; right:0; height:100%; overflow-x:hidden; overflow-y:auto;">
+		<div style="position:absolute; left:1px; width:1px; height:1000px;"></div>
+	</div>
+</div>
+		
+<div id="AbsBackground" class="layout-mask"></div>
+
+<div id="HelpDialog" class="layout-float popup dialog box">
+	<div class="layout-container">
+		<header>
+			<h3 class="dialog-drag-handle">帮助</h3>
+			<aside><button type="button" class="dialog-close-button">X</button></aside>
+		</header>
+		<section>
+			<ol>
+				<li>该工具目前仅适用于通过注释语法“///import namespace.package.Class;”在源码中指明依赖的库，如<a href="http://tangram.baidu.com/tangram/" target="_blank">百度Tangram</a>等。</li>
+				<li>该工具只提供打包功能，不提供语法检查功能，所以使用时必须基于提供源码的语法正确性。</li>
+				<li>需要PHP 5.3支持</li>
+				<li>模块树中：<strong>加粗</strong>表示用户主动选中的模块；“选中”表示肯定会被打包的模块；<span style="background:#cf9; -webkit-border-radius:2px; -moz-border-radius:2px; border-radius:2px;">绿色背景</span>表示会被依赖打包的模块。</li>
+			</ol>
+		</section>
+	</div>
+</div>
+
+<div id="ConsoleLogDialog" class="layout-float popup dialog box">
+	<div class="layout-container">
+		<header>
+			<h3 class="dialog-drag-handle">控制台输出</h3>
+			<aside><button type="button" class="dialog-close-button">X</button></aside>
+		</header>
+		<section>
+			<div name="console" id="ConsoleContent"></div>
+		</section>
+	</div>
+</div>
+
+<div id="RepositoryConfigDialog" class="layout-float popup dialog box">
+	<div class="layout-container">
+		<header>
+			<h3 class="dialog-drag-handle">仓库配置</h3>
+			<aside><button type="button" class="dialog-close-button close-button">X</button></aside>
+		</header>
+		<section id="RepositoryConfigTabWrap">
+			<div class="tab-switch-wrap">
+				<div class="tab-switch">已配置列表</div>
+				<div class="tab-switch">添加仓库</div>
+			</div>
+			<div class="tab-content-wrap">
+				<form id="RepositoryConfigModifyForm" class="tab-content">
+					<p class="hint">以下仓库均在<code>config.js</code>文件中配置。</p>
+					<ul id="RepositoryConfigList" class="package-list">
+						<li label="js">
+							<aside><button type="button" class="close-button" title="移除该库">x</button></aside>
+							<p><label>命名空间：</label><span class="item-namespace">js</span>，<label>仓库路径：</label><span>/jslib/src</span>，<label>仓库路径：</label><span>/jslib/src</span></p>
+						</li>
+					</ul>
+					<p class="operation">
+						<button type="submit" class="button green">确认导入</button>
+						<button type="button" class="button white dialog-close-button">取消</button>
+						<label for="RepositoryConfigNotifyCheck"><input type="checkbox" id="RepositoryConfigNotifyCheck" name="hideConfig" />不再提示配置信息</label>
+					</p>
+				</form>
+				<form id="RepositoryConfigAddForm" class="tab-content">
+					<table>
+						<tbody>
+							<tr>
+								<th>命名空间：</th>
+								<td>
+									<input type="text" name="namespace" id="RepoCfgNewNSInput" class="input-short" required />
+									<label for="RepoCfgNSHiddenCheck"><input type="checkbox" name="hidden" id="RepoCfgNSHiddenCheck" value="1">隐藏命名空间</label><q title="开启后将不对外暴露该命名空间，一般用于混合库，只有在启用“闭包包装器”设置时有效。">[?]</q>
+								</td>
+							</tr>
+							<tr>
+								<th>仓库路径：</th>
+								<td><input type="text" name="path" class="input-long" required /><span class="hint">请输入相对于当前web站点的路径，例如：<code>/jslib/src</code></span></td>
+							</tr>
+							<tr>
+								<th>混入其他：</th>
+								<td><span id="RepositoryConfigAddMixinItemList" class="mixed-package-list"><span class="mixed-package-item"><input type="text" name="mixins" class="input-short" /><button type="button" class="close-button item-delete-button">x</button></span></span><button type="button" id="RepositoryConfigAddItemMixins" class="button white"><strong>&amp;</strong></button></td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="operation"><button type="submit" class="button green"><strong>+</strong> 添加</button><button type="reset" class="button white"><strong>x</strong> 取消</button></p>
+				</form>
+			</div>
+		</section>
+	</div>
+</div>
+
+<script src="js/elf.js"></script>
+<script src="js/o2lab.js"></script>
+<script src="js/libpkr.js"></script>
+<script src="config.js"></script>
+</body>
+</html>
