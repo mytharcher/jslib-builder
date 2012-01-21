@@ -1,5 +1,9 @@
+/*!
+ * Build by elf JavaScript library builder @<?php echo time(); ?>
+ * http://elfjs.com/
+ */
 (function (host, undefined) {
-	function mix (target, source) {
+	function <?php echo $data['mixFnName']; ?> (target, source) {
 		for (var i in source)
 			if (source.hasOwnProperty(i))
 				target[i] = source[i];
@@ -13,7 +17,7 @@ foreach ($data['jsonStructure'] as $name => $json) {
 	$pack = $data['packages'][$name];
 	if (isset($pack['mixins'])) {
 		foreach ($pack['mixins'] as $mixin) {
-			echo "\tmix(packages['$name'], packages['$mixin']);\r\n";
+			echo "\t" . $data['mixFnName'] . "(packages['$name'], packages['$mixin']);\r\n";
 		}
 	}
 	if (!isset($pack['hidden']) || !$pack['hidden']) {

@@ -32,6 +32,15 @@ class ContentBuffer {
 	}
 }
 
+/**
+ * 创建一个随机函数名
+ */
+function random_fn_name($n = 6) {
+	$seed = 'abcdefghijklmnopqrstuvwxyz';
+	return substr($seed, time() % strlen($seed), 1) . substr(md5(time()), 0, $n - 1);
+}
+
+
 function parse_source($file, &$flagMap, &$options) {
 	$content = '';
 	
@@ -181,11 +190,11 @@ function get_file_path_by_class_name($class_name, &$options) {
 	$ret = false;
 	if ($class_name) {
 		$class_array = explode('.', $class_name);
+		//取顶级包名来查询配置中是否已有该包的配置
 		$pack = $class_array[0];
-		$package = $options['packages'][$pack];
 		$baseDir = $options['baseDir'];
-		if (isset($package)) {
-			$ret = $baseDir . $package['path'] . '/' . implode('/', $class_array) . '.js';
+		if (isset($options['packages'][$pack])) {
+			$ret = $baseDir . $options['packages'][$pack]['path'] . '/' . implode('/', $class_array) . '.js';
 		}
 	}
 	return $ret;
@@ -229,6 +238,7 @@ function closure_wrap(&$content, $options) {
 	$json_content = replace_short_json($json_content, $list);
 	
 	$data = array(
+		'mixFnName' => random_fn_name(8),
 		'packages' => $options['packages'],
 		'varList' => implode(",\n", get_short_list($list)),
 		'scriptContent' => $content,
@@ -238,7 +248,7 @@ function closure_wrap(&$content, $options) {
 	
 	ob_start();
 	ob_implicit_flush(false);
-	require('wrap.js.php');
+	require('tpl/wrap.js.php');
 	$wrap = ob_get_clean();
 	
 	/*
@@ -435,7 +445,7 @@ function build() {
 			$javapath = 'java';
 			ob_start();
 			ob_implicit_flush(false);
-			require('compress-cli-tpl/' . $options['compressType'] . '.tpl.php');
+			require('tpl/' . $options['compressType'] . '.cli.php');
 			$cli = ob_get_clean();
 			
 			exec($cli, $output);

@@ -52,31 +52,37 @@ elf.util.Namespace.get('libpkr.DependTree', this, elf.util.Class.create({
 	
 	_dependItemCheck: function (value) {
 		var itemNode = this._getItemNodeByValue(value);
-		var itemCheckInput = this._getCheckItemByValue(value);
-		//当前项的依赖列表
-		var dependItems = elf.dom.Selector.queryAll('input[type=hidden]', itemNode.firstChild);
-		var dependValues = dependItems.map(function (item) {return item.value;});
-		
-		//当前项的被依赖情况
-		var dependency = this.dependMap[value] || (this.dependMap[value] = new elf.util.Set());
-		var isDependent = !dependency.isEmpty();
-		//当前项是选中或被其他项依赖时
-		var opKey = itemCheckInput.checked || isDependent ? 'add' : 'remove';
-		
-		if (!itemCheckInput.checked) {
-			elf().removeClass(itemNode, 'chosen');
+		if (itemNode) {
+			var itemCheckInput = this._getCheckItemByValue(value);
+			//当前项的依赖列表
+			var dependItems = elf.dom.Selector.queryAll('input[type=hidden]', itemNode.firstChild);
+			var dependValues = dependItems.map(function (item) {return item.value;});
+			
+			//当前项的被依赖情况
+			var dependency = this.dependMap[value] || (this.dependMap[value] = new elf.util.Set());
+			var isDependent = !dependency.isEmpty();
+			//当前项是选中或被其他项依赖时
+			var opKey = itemCheckInput.checked || isDependent ? 'add' : 'remove';
+			
+			if (!itemCheckInput.checked) {
+				elf().removeClass(itemNode, 'chosen');
+			}
+			
+			//对当前项的依赖列表遍历
+			dependItems.forEach(function (item) {
+				var itemDependency = this.dependMap[item.value]
+					|| (this.dependMap[item.value] = new elf.util.Set());
+				itemDependency[opKey](value);
+				
+				var dependItem = this._getItemNodeByValue(item.value);
+				if (dependItem) {
+					elf()[itemDependency.isEmpty() ? 'removeClass' : 'addClass'](dependItem, 'depends');
+				}
+				
+				
+				this._dependItemCheck(item.value);
+			}, this);
 		}
-		
-		//对当前项的依赖列表遍历
-		dependItems.forEach(function (item) {
-			var itemDependency = this.dependMap[item.value]
-				|| (this.dependMap[item.value] = new elf.util.Set());
-			itemDependency[opKey](value);
-			
-			elf()[itemDependency.isEmpty() ? 'removeClass' : 'addClass'](this._getItemNodeByValue(item.value), 'depends');
-			
-			this._dependItemCheck(item.value);
-		}, this);
 	},
 	
 	checkLinkedItem: function (checkInput) {
@@ -547,7 +553,7 @@ elf.util.Namespace.get('libpkr.BuildTool', this, {
 						url: myForm.action,
 						method: myForm.method || elf.net.Ajax.HTTP_POST,
 						data: data,
-						onSuccess: me._onexport
+						onsuccess: me._onexport
 					});
 				}
 				
@@ -708,7 +714,7 @@ elf.util.Namespace.get('libpkr.BuildTool', this, {
 			url: this.URL_GET_LIST,
 			data: data,
 			responseType: elf.net.Ajax.DATA_TYPE_JSON,
-			onSuccess: function (list) {
+			onsuccess: function (list) {
 				me.classTree.updateData(list);
 				var modules = me.config.modules;
 				modules && modules.length && me.classTree.checkItemByValues(modules);

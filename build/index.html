@@ -328,6 +328,7 @@ document.createElement('section');
 			<ol>
 				<li>该工具目前仅适用于通过注释语法“///import namespace.package.Class;”在源码中指明依赖的库，如<a href="http://tangram.baidu.com/tangram/" target="_blank">百度Tangram</a>等。</li>
 				<li>该工具只提供打包功能，不提供语法检查功能，所以使用时必须基于提供源码的语法正确性。</li>
+				<li>所有代码中不能使用“$”开头的变量名，或任何符合/\$\w+/正则的串，这类串会被PHP当做变量造成打包错误。</li>
 				<li>需要PHP 5.3支持</li>
 				<li>模块树中：<strong>加粗</strong>表示用户主动选中的模块；“选中”表示肯定会被打包的模块；<span style="background:#cf9; -webkit-border-radius:2px; -moz-border-radius:2px; border-radius:2px;">绿色背景</span>表示会被依赖打包的模块。</li>
 			</ol>
