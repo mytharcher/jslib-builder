@@ -1,0 +1,9 @@
+[submodule "repository/jslib"]
+	path = repository/jslib
+	url = git://github.com/elfjs/jslib.git
+[submodule "repository/elf"]
+	path = repository/elf
+	url = git://github.com/elfjs/elf.git
+[submodule "repository/tangram"]
+	path = repository/tangram
+	url = git://github.com/BaiduFE/Tangram-base.git
