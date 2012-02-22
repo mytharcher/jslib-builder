@@ -1,7 +1,7 @@
 JavaScript Library Builder
 ==========================
 
-这个工具为JavaScript基础库打包而设计，主要用于打包有如Java组织方式的JavaScript代码，并提供依赖管理和代码压缩等功能。
+这个工具为JavaScript基础库打包而设计，主要用于打包有如Java组织方式的JavaScript代码，并配套提供依赖管理和代码压缩等功能。
 
 ## 主要功能
 
@@ -38,7 +38,7 @@ JavaScript Library Builder
 		|-- output/
 		`-- repository/
 		    |-- jslib/
-			|   `-- src
+			|   `-- src/
 			|       |-- js/
 			|       |   |-- util/
 			|       |   |   |-- Class.js
@@ -46,7 +46,7 @@ JavaScript Library Builder
 			|       |   ...
 			|       `-- js.js
 		    `-- elf/
-			    `-- src
+			    `-- src/
 			        |-- elf/
 			        |   |-- ~namespace/...
 			        |   `-- ~shortcut/...
@@ -58,17 +58,17 @@ JavaScript Library Builder
 	
 		///import namespace.package.Class;
 	
-	工具会根据依赖的声明自动处理先后顺序，
+	工具会根据依赖的声明自动处理先后顺序。一般依赖关系的定义放在文件的头部，但如果两个（或多个）文件`A.js`和`B.js`之间存在循环依赖，可以将对其中定义过程中不执行的部分的那一个文件例如`A.js`的依赖放在`B.js`文件的尾部，即通过后置依赖解决。
 
 0. 参照源码中的[config.js](https://github.com/elfjs/jslib-builder/blob/master/build/config.js)进行仓库配置：
 
 		libpkr.BuildTool.config = {
 			packages: {
-			//	options: {
-			//		title: '这个包是一个测试的包',  // 库名称标题
-			//		path: 'a/path/string',          // 仓库相对于Web服务的绝对路径。
-			//		hidden: false,                  // （可选）是否不开放此顶级命名空间，在要用到闭包包装器及与其他命名空间混合时可用。默认：false
-			//		mixins: ['other', 'lib']        // （可选）是否以本库为基础混入其他命名空间的内容，同样要在启用闭包包装器时才可用。
+			//	example: {
+			//		title: '这个包是一个测试的包', // 库名称标题
+			//		path: '/a/path/string',     // 仓库相对于Web服务的绝对路径。
+			//		hidden: false,              // （可选）是否不开放此顶级命名空间，在要用到闭包包装器及与其他命名空间混合时可用。
+			//		mixins: ['other', 'lib']    // （可选）是否以本库为基础混入其他命名空间的内容，同样要在启用闭包包装器时才可用。
 			//	},
 				js: {
 					path: '/repository/jslib/src',
@@ -93,7 +93,7 @@ JavaScript Library Builder
 ## 使用注意
 
 * 该工具只提供打包功能，不提供语法检查功能，所以使用时必须基于提供源码的语法正确性。
-* 所有代码中不能使用`$`开头的变量名，或任何符合/\$\w+/正则的串，这类串会被PHP当做变量造成打包错误。
+* 所有代码中不能使用`$`开头的变量名，或任何符合`/\$\w+/`正则的串，这类串会被PHP当做变量造成打包错误。
 * 模块树中：加粗表示用户主动选中的模块；“选中”表示肯定会被打包的模块；绿色背景表示会被依赖打包的模块。
 
 ## 帮助与支持
