@@ -1,0 +1,5 @@
+Options +ExecCGI
+AddHandler php53-cgi .php
+Action php-cgi /cgi-bin/php-wrapper.cgi
+Action php5-cgi /cgi-bin/php-wrapper.cgi
+Action php53-cgi /cgi-bin/php-wrapper.cgi

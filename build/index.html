@@ -208,25 +208,9 @@ button.operation-button{
 
 #Footnote ol{padding:0 0 0 25px;}
 
-#RepositoryConfigDialog{width:600px;}
-#RepositoryConfigDialog .tab-switch-wrap{clear:both; zoom:1; overflow:auto; border-bottom:1px solid #bbb;}
-#RepositoryConfigDialog .tab-switch{float:left; zoom:1; margin:0 0 -1px 5px; padding:0 10px; border:1px solid #bbb; cursor:pointer;}
-#RepositoryConfigDialog .tab-switch.on{background:#bbb; color:#fff; font-weight:bold; cursor:default;}
-#RepositoryConfigDialog .tab-content-wrap{clear:both;}
-#RepositoryConfigDialog .tab-content{display:none;}
-#RepositoryConfigDialog .tab-content.active{display:block;}
-#RepositoryConfigDialog section .close-button:hover{background:none; color:#f00;}
-#RepositoryConfigDialog .input-short{width:50px;}
-#RepositoryConfigDialog .input-long{width:150px;}
-#RepositoryConfigDialog form th{font-weight:normal;}
-#RepositoryConfigDialog form p.operation{margin-top:15px;}
-#RepositoryConfigList li{margin:5px 0;}
-#RepositoryConfigList li:hover{background:#def;}
-#RepositoryConfigList li>aside{float:right;}
 .package-list span.item-namespace{margin-right:2px; padding:1px 5px; border:1px solid #06c; -webkit-border-radius:2px; -moz-border-radius:2px; border-radius:2px; color:#06c; background:#fff; cursor:default;}
 .package-list span.item-hidden{font-style:italic; color:#999; border-color:#999;}
 .package-list span.item-mixined{font-weight:bold;}
-#RepositoryConfigList .mixin-item{margin:0 2px; padding:1px 5px; border:1px dotted #06c; -webkit-border-radius:2px; -moz-border-radius:2px; border-radius:2px; background:#fff; color:#06c;}
 
 #ConsoleContent{width:500px; height:300px; overflow:auto;}
 </style>
@@ -262,7 +246,6 @@ document.createElement('section');
 							<legend>仓库配置</legend>
 							<h4>已导入的仓库</h4>
 							<p id="ImportRepoList" class="package-list"></p>
-							<p><button type="button" id="ChangeConifgBtn" class="button white">修改仓库配置</button></p>
 						</fieldset>
 						<fieldset id="DependCheckGroup">
 							<legend>依赖管理</legend>
@@ -271,15 +254,6 @@ document.createElement('section');
 								<label for="NoDependRadio" title="不推荐"><input type="radio" name="exportDepend" id="NoDependRadio" value="0" />只导出选中模块</label>
 							</p>
 						</fieldset>
-						<fieldset id="ExportTypeGroup">
-							<legend>导出目标</legend>
-							<p>
-								<label for="ExportByDownloadRadio"><input type="radio" name="exportType" id="ExportByDownloadRadio" value="1" checked />下载文件</label>
-							</p>
-							<p>
-								<input type="radio" name="exportType" id="ExportByPathRadio" value="0" /><label for="ExportByPathRadio">生成到指定路径</label>
-								<label id="ExportByPathLabel" for="ExportPathInput" class="optional">：<input type="text" name="exportPath" id="ExportPathInput" placeholder="请输入导出路径" value="../output/lib.js" /></label></p>
-						</fieldset>
 						<fieldset>
 							<legend>压缩选项</legend>
 							<ul>
@@ -287,7 +261,6 @@ document.createElement('section');
 								<li><label for="CompressByYUIRadio" title="YUI Compressor"><input type="radio" name="compressType" id="CompressByYUIRadio" value="yui" />YUI压缩</label> <a href="http://developer.yahoo.com/yui/compressor/" target="_blank" title="了解详情">[?]</a></li>
 								<li><label for="CompressByGCCRadio" title="Google Closure Compiler"><input type="radio" name="compressType" id="CompressByGCCRadio" value="gcc" />GCC压缩</label> <a href="http://closure-compiler.appspot.com/" target="_blank" title="了解详情">[?]</a></li>
 								<li><label for="CompressByWebPackerRadio" title="百度前端大牛欧阳先伟开发的JS压缩器"><input type="radio" name="compressType" id="CompressByWebPackerRadio" value="webpacker" />WebPacker压缩</label></li>
-								<!--<li><label for="CompressByJSARadio" title="百度前端大牛金大为开发的JS压缩器"><input type="radio" name="compressType" id="CompressByJSARadio" value="jsa" />JSA压缩</label></li>-->
 							</ul>
 						</fieldset>
 						<fieldset>
@@ -311,9 +284,6 @@ document.createElement('section');
 			</div>
 		</div>
 	</div>
-	<div style="position:absolute; top:0; right:0; height:100%; overflow-x:hidden; overflow-y:auto;">
-		<div style="position:absolute; left:1px; width:1px; height:1000px;"></div>
-	</div>
 </div>
 		
 <div id="AbsBackground" class="layout-mask"></div>
@@ -328,7 +298,6 @@ document.createElement('section');
 			<ol>
 				<li>该工具目前仅适用于通过注释语法“///import namespace.package.Class;”在源码中指明依赖的库，如<a href="http://tangram.baidu.com/tangram/" target="_blank">百度Tangram</a>等。</li>
 				<li>该工具只提供打包功能，不提供语法检查功能，所以使用时必须基于提供源码的语法正确性。</li>
-				<li>所有代码中不能使用“$”开头的变量名，或任何符合/\$\w+/正则的串，这类串会被PHP当做变量造成打包错误。</li>
 				<li>需要PHP 5.3支持</li>
 				<li>模块树中：<strong>加粗</strong>表示用户主动选中的模块；“选中”表示肯定会被打包的模块；<span style="background:#cf9; -webkit-border-radius:2px; -moz-border-radius:2px; border-radius:2px;">绿色背景</span>表示会被依赖打包的模块。</li>
 			</ol>
@@ -348,62 +317,26 @@ document.createElement('section');
 	</div>
 </div>
 
-<div id="RepositoryConfigDialog" class="layout-float popup dialog box">
-	<div class="layout-container">
-		<header>
-			<h3 class="dialog-drag-handle">仓库配置</h3>
-			<aside><button type="button" class="dialog-close-button close-button">X</button></aside>
-		</header>
-		<section id="RepositoryConfigTabWrap">
-			<div class="tab-switch-wrap">
-				<div class="tab-switch">已配置列表</div>
-				<div class="tab-switch">添加仓库</div>
-			</div>
-			<div class="tab-content-wrap">
-				<form id="RepositoryConfigModifyForm" class="tab-content">
-					<p class="hint">以下仓库均在<code>config.js</code>文件中配置。</p>
-					<ul id="RepositoryConfigList" class="package-list">
-						<li label="js">
-							<aside><button type="button" class="close-button" title="移除该库">x</button></aside>
-							<p><label>命名空间：</label><span class="item-namespace">js</span>，<label>仓库路径：</label><span>/jslib/src</span>，<label>仓库路径：</label><span>/jslib/src</span></p>
-						</li>
-					</ul>
-					<p class="operation">
-						<button type="submit" class="button green">确认导入</button>
-						<button type="button" class="button white dialog-close-button">取消</button>
-						<label for="RepositoryConfigNotifyCheck"><input type="checkbox" id="RepositoryConfigNotifyCheck" name="hideConfig" />不再提示配置信息</label>
-					</p>
-				</form>
-				<form id="RepositoryConfigAddForm" class="tab-content">
-					<table>
-						<tbody>
-							<tr>
-								<th>命名空间：</th>
-								<td>
-									<input type="text" name="namespace" id="RepoCfgNewNSInput" class="input-short" required />
-									<label for="RepoCfgNSHiddenCheck"><input type="checkbox" name="hidden" id="RepoCfgNSHiddenCheck" value="1">隐藏命名空间</label><q title="开启后将不对外暴露该命名空间，一般用于混合库，只有在启用“闭包包装器”设置时有效。">[?]</q>
-								</td>
-							</tr>
-							<tr>
-								<th>仓库路径：</th>
-								<td><input type="text" name="path" class="input-long" required /><span class="hint">请输入相对于当前web站点的路径，例如：<code>/jslib/src</code></span></td>
-							</tr>
-							<tr>
-								<th>混入其他：</th>
-								<td><span id="RepositoryConfigAddMixinItemList" class="mixed-package-list"><span class="mixed-package-item"><input type="text" name="mixins" class="input-short" /><button type="button" class="close-button item-delete-button">x</button></span></span><button type="button" id="RepositoryConfigAddItemMixins" class="button white"><strong>&amp;</strong></button></td>
-							</tr>
-						</tbody>
-					</table>
-					<p class="operation"><button type="submit" class="button green"><strong>+</strong> 添加</button><button type="reset" class="button white"><strong>x</strong> 取消</button></p>
-				</form>
-			</div>
-		</section>
-	</div>
-</div>
-
 <script src="js/elf.js"></script>
 <script src="js/o2lab.js"></script>
 <script src="js/libpkr.js"></script>
 <script src="config.js"></script>
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc721ec118ef865ee41646415bc0e9734' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-27954937-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
 </body>
 </html>
