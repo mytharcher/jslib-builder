@@ -11,7 +11,24 @@ function key_in_array($key, $arr) {
 	return $flag;
 }
 
+/**
+ * 调整波浪号的字符顺序，以排序到字母之前
+ */
+function fix_tilde_code ($str) {
+	if ($str{0} == '~') {
+		$str = '/' . substr($str, 1);
+	}
+	return $str;
+}
 
+/**
+ * 加入波浪号修正顺序的字符串排序
+ */
+function fix_tilde_order (&$list) {
+	usort($list, function ($a, $b) {
+		return fix_tilde_code($a) <= fix_tilde_code($b) ? -1 : 1;
+	});
+}
 
 /**
  * 获取某个文件夹下的所有文件列表，以“.”开头的除外
@@ -38,7 +55,7 @@ function get_dir_list($path = './', $baseDir = './', $deep = false) {
 			}
 			closedir($dir);
 			
-			sort($fileList, SORT_STRING);
+			fix_tilde_order($fileList);
 			
 			foreach($fileList as $file) {
 				$curFile = $curPath . $file;
@@ -72,7 +89,7 @@ function dir_dfs($path, $func, $filter = null) {
 			}
 			closedir($dir);
 			
-			sort($fileList, SORT_STRING);
+			fix_tilde_order($fileList);
 			
 			foreach($fileList as $file) {
 				if (dir_dfs("$cur/$file", $func, $filter) === false) {
