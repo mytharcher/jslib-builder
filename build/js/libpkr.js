@@ -206,7 +206,7 @@ elf.util.Namespace.get('libpkr.DependTree', this, elf.util.Class.create({
 		if (depends) {
 			ret = elf.util.XArray.distinct(
 				ret.concat(this.getDependList())
-			).sort();
+			);
 		}
 		
 		return ret;
