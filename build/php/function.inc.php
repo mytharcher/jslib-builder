@@ -15,10 +15,7 @@ function key_in_array($key, $arr) {
  * 调整波浪号的字符顺序，以排序到字母之前
  */
 function fix_tilde_code ($str) {
-	if ($str{0} == '~') {
-		$str = '/' . substr($str, 1);
-	}
-	return $str;
+	return str_replace('~', '/', $str);
 }
 
 /**
