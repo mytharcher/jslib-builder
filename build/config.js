@@ -12,14 +12,22 @@
 			title: 'jslib基础库，提供很多通用的基础核心工具类。'
 		},
 		elf: {
-			path: '/repository/elfjs/src',
+			path: '/repository/elf/src',
 			title: '基于jslib进行了易用性封装的库外壳。',
 			mixins: ['js']
+		},
+		er: {
+			path: '/repository/er/src',
+			title: 'ER框架(标准版)'
+		},
+		esui: {
+			path: '/repository/er/src',
+			title: 'esui组件库(标准版)'
+		},
+		baidu: {
+			path: '/repository/tangram/src',
+			title: '百度Tangram基础库。'
 		}
-		// baidu: {
-			// path: '/repository/tangram/src',
-			// title: '百度Tangram基础库。'
-		// }
 	},
 	
 	hideConfig: 1
