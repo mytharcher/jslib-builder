@@ -11,13 +11,27 @@ function key_in_array($key, $arr) {
 	return $flag;
 }
 
-
+/**
+ * è°ƒæ•´æ³¢æµªå·çš„å­—ç¬¦é¡ºåºï¼Œä»¥æ’åºåˆ°å­—æ¯ä¹‹å‰
+ */
+function fix_tilde_code ($str) {
+	return str_replace('~', '/', $str);
+}
 
 /**
- * »ñÈ¡Ä³¸öÎÄ¼ş¼ĞÏÂµÄËùÓĞÎÄ¼şÁĞ±í£¬ÒÔ¡°.¡±¿ªÍ·µÄ³ıÍâ
- * @param {String} $path Òª¼ÆËãµÄÎÄ¼ş(ÁĞ±í/ÎÄ¼ş¼Ğ)Â·¾¶£¬¿ÉÒÔÊÇÎÄ¼şÂ·¾¶£¬ÎÄ¼ş¼ĞÂ·¾¶£¬»òÕßÎÄ¼şÂ·¾¶Êı×é
- * @param {String} $baseDir »ùÓÚ²éÑ¯µÄÄ¿Â¼
- * @param {Boolean} $deep ÊÇ·ñµİ¹é»ñÈ¡Éî²ãµÄÎÄ¼ş
+ * åŠ å…¥æ³¢æµªå·ä¿®æ­£é¡ºåºçš„å­—ç¬¦ä¸²æ’åº
+ */
+function fix_tilde_order (&$list) {
+	usort($list, function ($a, $b) {
+		return fix_tilde_code($a) <= fix_tilde_code($b) ? -1 : 1;
+	});
+}
+
+/**
+ * è·å–æŸä¸ªæ–‡ä»¶å¤¹ä¸‹çš„æ‰€æœ‰æ–‡ä»¶åˆ—è¡¨ï¼Œä»¥â€œ.â€å¼€å¤´çš„é™¤å¤–
+ * @param {String} $path è¦è®¡ç®—çš„æ–‡ä»¶(åˆ—è¡¨/æ–‡ä»¶å¤¹)è·¯å¾„ï¼Œå¯ä»¥æ˜¯æ–‡ä»¶è·¯å¾„ï¼Œæ–‡ä»¶å¤¹è·¯å¾„ï¼Œæˆ–è€…æ–‡ä»¶è·¯å¾„æ•°ç»„
+ * @param {String} $baseDir åŸºäºæŸ¥è¯¢çš„ç›®å½•
+ * @param {Boolean} $deep æ˜¯å¦é€’å½’è·å–æ·±å±‚çš„æ–‡ä»¶
  */
 function get_dir_list($path = './', $baseDir = './', $deep = false) {
 	$list = array();
@@ -38,7 +52,7 @@ function get_dir_list($path = './', $baseDir = './', $deep = false) {
 			}
 			closedir($dir);
 			
-			sort($fileList, SORT_STRING);
+			fix_tilde_order($fileList);
 			
 			foreach($fileList as $file) {
 				$curFile = $curPath . $file;
@@ -72,7 +86,7 @@ function dir_dfs($path, $func, $filter = null) {
 			}
 			closedir($dir);
 			
-			sort($fileList, SORT_STRING);
+			fix_tilde_order($fileList);
 			
 			foreach($fileList as $file) {
 				if (dir_dfs("$cur/$file", $func, $filter) === false) {
@@ -85,7 +99,7 @@ function dir_dfs($path, $func, $filter = null) {
 
 
 /**
- * »ñÈ¡ÎÄ¼şµÚÒ»¿éÎÄµµ×¢ÊÍĞÅÏ¢
+ * è·å–æ–‡ä»¶ç¬¬ä¸€å—æ–‡æ¡£æ³¨é‡Šä¿¡æ¯
  */
 function parse_source_head_info($content) {
 	$info = null;

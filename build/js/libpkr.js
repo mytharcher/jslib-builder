@@ -206,7 +206,7 @@ elf.util.Namespace.get('libpkr.DependTree', this, elf.util.Class.create({
 		if (depends) {
 			ret = elf.util.XArray.distinct(
 				ret.concat(this.getDependList())
-			).sort();
+			);
 		}
 		
 		return ret;
@@ -657,7 +657,7 @@ elf.util.Namespace.get('libpkr.BuildTool', this, {
 	 */
 	saveCookie: function (data, options) {
 		elf.util.Class.copy(data, this.config);
-		var d = elf.util.Class.extend({}, this.config, this._configSavingFilter);
+		var d = elf.util.Class.mix({}, this.config, this._configSavingFilter);
 		if (elf().isObject(d.packages)) {
 			d.packages = JSON.stringify(d.packages);
 		}
