@@ -17,16 +17,16 @@
 			mixins: ['js']
 		},
 		er: {
-			path: '/repository/er/src',
-			title: 'ER框架(标准版)'
+			path: '/repository/ER/src',
+			title: 'ER框架(扩展版)'
 		},
 		esui: {
-			path: '/repository/er/src',
-			title: 'esui组件库(标准版)'
+			path: '/repository/ER/src',
+			title: 'esui组件库(扩展版)'
 		},
 		baidu: {
 			path: '/repository/tangram/src',
-			title: '百度Tangram基础库。'
+			title: '百度Tangram 1.x版基础库。'
 		}
 	},
 	

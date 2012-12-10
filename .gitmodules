@@ -7,3 +7,6 @@
 [submodule "repository/tangram"]
 	path = repository/tangram
 	url = git://github.com/BaiduFE/Tangram-base.git
+[submodule "repository/ER"]
+	path = repository/ER
+	url = git://github.com/mytharcher/ER.git

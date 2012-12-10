@@ -66,7 +66,7 @@ function find_level($file, $path) {
 	$base = get_lib_path($path);
 	$pos = strlen($base);
 	$len = strlen($file);
-	if (strpos($file, '.js') == $len - 3) {
+	if (substr($file, -3) == '.js') {
 		$len -= 3;
 	}
 	$relPath = substr($file, $pos, $len - $pos);
@@ -83,6 +83,7 @@ function get_lib_path($path) {
 }
 
 function get_class_list_json() {
+	header("Content-type: text/plain; charset=utf-8");
 	$tree = get_class_tree($_GET['trunk']);
 	//print_r($tree);
 	echo(json_encode($tree));
