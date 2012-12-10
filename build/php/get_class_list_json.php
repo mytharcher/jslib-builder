@@ -5,7 +5,9 @@ function get_class_tree($paths) {
 	$root = null;
 	foreach ($paths as $path) {
 		dir_dfs(get_lib_path($path), function ($file) use (&$root, $path) {
-			add_to_tree($root, $file, $path);
+			if (is_dir($file) || substr($file, -3) == '.js') {
+				add_to_tree($root, $file, $path);
+			}
 		});
 	}
 	return $root;
