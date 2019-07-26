@@ -1,12 +1,12 @@
 [submodule "repository/jslib"]
 	path = repository/jslib
-	url = git://github.com/elfjs/jslib.git
+	url = git@github.com:mytharcher/jslib.git
 [submodule "repository/elf"]
 	path = repository/elf
-	url = git://github.com/elfjs/elf.git
+	url = git@github.com:mytharcher/elf.git
 [submodule "repository/tangram"]
 	path = repository/tangram
-	url = git://github.com/BaiduFE/Tangram-base.git
-[submodule "repository/ER"]
-	path = repository/ER
-	url = git://github.com/mytharcher/ER.git
+	url = git@github.com:BaiduFE/Tangram-base.git
+[submodule "repository/ER2"]
+	path = repository/ER2
+	url = git@github.com:mytharcher/ER2.git
